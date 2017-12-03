@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.pprp.core.api.model.Color;
 import org.pprp.core.api.model.Palette;
+import org.pprp.core.api.model.Point;
 
 public class BasePaletteImpl implements Palette {
 
@@ -18,5 +19,10 @@ public class BasePaletteImpl implements Palette {
     @Override
     public void cleanBrush() {
 
+    }
+
+    @Override
+    public Point getColorPoint(Color color) {
+        return null;
     }
 }

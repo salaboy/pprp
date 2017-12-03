@@ -58,7 +58,9 @@ public abstract class AbstractPainter implements Painter,
 
         internalPainter.selectBrush(stroke);
         // Do I need to mix a color?
-        internalPainter.mixColor(stroke);
+
+
+        internalPainter.pickColor(palette, stroke);
 
         internalPainter.performStroke(stroke);
 

@@ -7,6 +7,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.pprp.core.api.internal.gcode.GCodeUtil;
 import org.pprp.core.api.model.BrushType;
+import org.pprp.core.api.model.Color;
+import org.pprp.core.api.model.Palette;
 import org.pprp.core.api.model.Stroke;
 import org.pprp.core.impl.BasicBrushTypeImpl;
 import org.pprp.core.impl.HueSaturationBrightness;
@@ -26,11 +28,16 @@ public class BaseInternalPainter implements InternalPainter {
     }
 
     @Override
-    public void mixColor(Stroke stroke) {
-        HueSaturationBrightness hsb = stroke.getHSB();
-        //based on the stroke HSB mix the colors
+    public void init() {
+        workQueue.add(GCodeUtil.generateGCodeForInitPPRP());
 
-        // then generate G-CODE to mix the color
+    }
+
+    @Override
+    public void pickColor(Palette palette, Stroke stroke) {
+        HueSaturationBrightness hsb = stroke.getHSB();
+
+        workQueue.add(GCodeUtil.generateGCodeForPickColor(palette, Color.BLACK));
     }
 
     @Override

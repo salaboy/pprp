@@ -1,27 +1,24 @@
 package org.pprp.core.tests;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pprp.core.api.Painter;
-import org.pprp.core.api.internal.BaseInternalPainter;
 import org.pprp.core.api.internal.OutputCanvas;
-import org.pprp.core.api.internal.PainterEventListener;
 import org.pprp.core.api.internal.TechnicalPainter;
 import org.pprp.core.api.model.BrushStroke;
 import org.pprp.core.api.model.Palette;
 import org.pprp.core.api.model.Point;
 import org.pprp.core.api.model.Stroke;
 import org.pprp.core.impl.AbstractPainter;
-import org.pprp.core.impl.BasePaletteImpl;
 import org.pprp.core.impl.BasePointImpl;
-import org.pprp.core.impl.BasicPainterImpl;
 import org.pprp.core.impl.BrushStrokeImpl;
-import org.pprp.core.impl.CopyOnWriteOutputCanvas;
-import org.pprp.core.impl.DebugPainterEventListenerImpl;
 import org.pprp.core.impl.HueSaturationBrightness;
+import org.pprp.core.impl.PainterFactory;
+import org.pprp.core.impl.PhysicalPaletteImpl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,20 +27,18 @@ public class BasicPainterTest {
     private Painter painter;
 
     private MockPainterEventListenerImpl mockPel = new MockPainterEventListenerImpl();
-    private PainterEventListener debugPel = new DebugPainterEventListenerImpl();
+
+    private static final String MOCK_CANVAS = "mockCanvas";
 
     @BeforeEach
     void setUp() {
 
-        painter = new BasicPainterImpl(new BaseInternalPainter());
+        painter = PainterFactory.createDefaultPainter(Arrays.asList(MOCK_CANVAS));
 
+        // I need to setup the listeners before setting up the palette to not loose those events
         ((TechnicalPainter) painter).addPainterEventListener(mockPel);
-        ((TechnicalPainter) painter).addPainterEventListener(debugPel);
 
-        ((AbstractPainter) painter).getInternalPainter().addOutputCanvas("mock",
-                                                                         new CopyOnWriteOutputCanvas());
-
-        Palette palette = new BasePaletteImpl();
+        Palette palette = new PhysicalPaletteImpl();
 
         painter.setUpPalette(palette);
     }
@@ -61,13 +56,13 @@ public class BasicPainterTest {
         assertEquals(10,
                      mockPel.getEvents().size());
 
-        OutputCanvas mock = ((AbstractPainter) painter).getInternalPainter().getOutputCanvasByName("mock");
+        OutputCanvas mock = ((AbstractPainter) painter).getInternalPainter().getOutputCanvasByName(MOCK_CANVAS);
 
         assertEquals(4,
                      mock.size());
 
         List<String> workQueue = ((AbstractPainter) painter).getInternalPainter().getWorkQueue();
-        assertEquals(4,
+        assertEquals(8,
                      workQueue.size());
         for (String cmd : workQueue) {
             System.out.println(">> CMD: " + cmd);

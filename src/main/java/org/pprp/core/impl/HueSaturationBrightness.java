@@ -2,7 +2,7 @@ package org.pprp.core.impl;
 
 import org.pprp.core.api.model.Color;
 
-public class HueSaturationBrightness implements Color {
+public class HueSaturationBrightness {
     private float hue;
     private float saturation;
     private float brightness;

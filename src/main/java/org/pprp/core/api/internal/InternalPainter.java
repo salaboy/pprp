@@ -4,15 +4,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.pprp.core.api.model.BrushType;
+import org.pprp.core.api.model.Palette;
 import org.pprp.core.api.model.Stroke;
 /*
  * painters physical body
  */
 public interface InternalPainter {
 
+    void init();
+
     void cleanBrush();
 
-    void mixColor(Stroke stroke);
+    void pickColor(Palette palette, Stroke stroke);
 
     void selectBrush(Stroke stroke);
 
