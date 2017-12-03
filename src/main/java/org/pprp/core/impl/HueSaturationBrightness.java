@@ -27,7 +27,7 @@ public class HueSaturationBrightness implements Color {
 
     @Override
     public String toString() {
-        return "HueSaturationBrightness{" +
+        return "HSB{" +
                 "hue=" + hue +
                 ", saturation=" + saturation +
                 ", brightness=" + brightness +

@@ -1,6 +1,12 @@
 package org.pprp.core.api.events;
 
-public class AfterPaletteSetUpEvent implements PainterEvent{
+import org.pprp.core.api.model.Palette;
+
+public class AfterPaletteSetUpEvent extends AbstractPalettePainterEvent {
+
+    public AfterPaletteSetUpEvent(Palette palette) {
+        super(palette);
+    }
 
     @Override
     public String getEventType() {

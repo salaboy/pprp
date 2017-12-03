@@ -12,4 +12,6 @@ public interface Painter {
     void paint(Stroke stroke);
 
     void paint(Stroke... strokes);
+
+
 }

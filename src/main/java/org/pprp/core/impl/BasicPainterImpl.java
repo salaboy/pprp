@@ -1,11 +1,13 @@
 package org.pprp.core.impl;
 
+import org.pprp.core.api.internal.InternalPainter;
 import org.pprp.core.api.model.Palette;
 import org.pprp.core.api.model.Stroke;
 
 public class BasicPainterImpl extends AbstractPainter {
 
-    public BasicPainterImpl() {
+    public BasicPainterImpl(InternalPainter internalPainter) {
+        super(internalPainter);
     }
 
     @Override

@@ -38,4 +38,13 @@ public class BrushStrokeImpl implements BrushStroke {
     public HueSaturationBrightness getHSB() {
         return HSB;
     }
+
+    @Override
+    public String toString() {
+        return "BrushStroke{" +
+                "startPoint=" + startPoint +
+                ", endPoint=" + endPoint +
+                ", HSB=" + HSB +
+                '}';
+    }
 }

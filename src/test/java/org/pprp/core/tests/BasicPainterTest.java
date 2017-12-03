@@ -6,15 +6,21 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.pprp.core.api.Painter;
+import org.pprp.core.api.internal.BaseInternalPainter;
+import org.pprp.core.api.internal.OutputCanvas;
+import org.pprp.core.api.internal.PainterEventListener;
 import org.pprp.core.api.internal.TechnicalPainter;
 import org.pprp.core.api.model.BrushStroke;
 import org.pprp.core.api.model.Palette;
 import org.pprp.core.api.model.Point;
 import org.pprp.core.api.model.Stroke;
+import org.pprp.core.impl.AbstractPainter;
 import org.pprp.core.impl.BasePaletteImpl;
 import org.pprp.core.impl.BasePointImpl;
 import org.pprp.core.impl.BasicPainterImpl;
 import org.pprp.core.impl.BrushStrokeImpl;
+import org.pprp.core.impl.CopyOnWriteOutputCanvas;
+import org.pprp.core.impl.DebugPainterEventListenerImpl;
 import org.pprp.core.impl.HueSaturationBrightness;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,22 +29,27 @@ public class BasicPainterTest {
 
     private Painter painter;
 
-    private MockPainterEventListener pel = new MockPainterEventListener();
+    private MockPainterEventListenerImpl mockPel = new MockPainterEventListenerImpl();
+    private PainterEventListener debugPel = new DebugPainterEventListenerImpl();
 
     @BeforeEach
     void setUp() {
 
-        painter = new BasicPainterImpl();
+        painter = new BasicPainterImpl(new BaseInternalPainter());
 
-        ((TechnicalPainter) painter).addPainterEventListener(pel);
+        ((TechnicalPainter) painter).addPainterEventListener(mockPel);
+        ((TechnicalPainter) painter).addPainterEventListener(debugPel);
+
+        ((AbstractPainter) painter).getInternalPainter().addOutputCanvas("mock",
+                                                                         new CopyOnWriteOutputCanvas());
 
         Palette palette = new BasePaletteImpl();
-        
+
         painter.setUpPalette(palette);
     }
 
     @Test
-    void createABoxWithStrokes() {
+    void createABoxWithStrokesTest() {
 
         List<Stroke> boxStrokes = generateBoxStrokes();
 
@@ -48,7 +59,19 @@ public class BasicPainterTest {
         painter.paint(boxStrokes.parallelStream().toArray(Stroke[]::new));
 
         assertEquals(10,
-                     pel.getEvents().size());
+                     mockPel.getEvents().size());
+
+        OutputCanvas mock = ((AbstractPainter) painter).getInternalPainter().getOutputCanvasByName("mock");
+
+        assertEquals(4,
+                     mock.size());
+
+        List<String> workQueue = ((AbstractPainter) painter).getInternalPainter().getWorkQueue();
+        assertEquals(4,
+                     workQueue.size());
+        for (String cmd : workQueue) {
+            System.out.println(">> CMD: " + cmd);
+        }
     }
 
     private List<Stroke> generateBoxStrokes() {
@@ -68,7 +91,6 @@ public class BasicPainterTest {
         BrushStroke brushStroke1 = new BrushStrokeImpl(startPoint1,
                                                        endPoint1,
                                                        HSB);
-
         boxStrokes.add(brushStroke1);
 
         // bottom side of the box
@@ -80,7 +102,6 @@ public class BasicPainterTest {
         BrushStroke brushStroke2 = new BrushStrokeImpl(startPoint2,
                                                        endPoint2,
                                                        HSB);
-
         boxStrokes.add(brushStroke2);
 
         // right side of the box
@@ -92,7 +113,6 @@ public class BasicPainterTest {
         BrushStroke brushStroke3 = new BrushStrokeImpl(startPoint3,
                                                        endPoint3,
                                                        HSB);
-
         boxStrokes.add(brushStroke3);
 
         // top side of the box

@@ -1,6 +1,12 @@
 package org.pprp.core.api.events;
 
-public class BeforeStrokeStartedEvent implements PainterEvent {
+import org.pprp.core.api.model.Stroke;
+
+public class BeforeStrokeStartedEvent extends AbstractStrokePainterEvent {
+
+    public BeforeStrokeStartedEvent(Stroke stroke) {
+        super(stroke);
+    }
 
     @Override
     public String getEventType() {
