@@ -62,7 +62,7 @@ public class BasicPainterTest {
                      mock.size());
 
         List<String> workQueue = ((AbstractPainter) painter).getInternalPainter().getWorkQueue();
-        assertEquals(8,
+        assertEquals(9,
                      workQueue.size());
         for (String cmd : workQueue) {
             System.out.println(">> CMD: " + cmd);

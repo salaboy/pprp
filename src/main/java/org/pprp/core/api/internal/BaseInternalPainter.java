@@ -19,6 +19,10 @@ public class BaseInternalPainter implements InternalPainter {
     private Map<String, OutputCanvas> outputCanvases = new ConcurrentHashMap<>();
     private List<String> workQueue = new CopyOnWriteArrayList<>();
 
+    public BaseInternalPainter() {
+        init();
+    }
+
     @Override
     public void cleanBrush() {
         //clean currentBrush

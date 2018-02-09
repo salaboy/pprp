@@ -54,7 +54,7 @@ public class GCodeUtil {
         gcodeBuffer.append("G92 Z0").append(LINE_BREAK);
         gcodeBuffer.append("G0 Z40").append(LINE_BREAK);
         gcodeBuffer.append("G28").append(LINE_BREAK);
-        gcodeBuffer.append("G20 Y80").append(LINE_BREAK);
+        gcodeBuffer.append("G0 Y80").append(LINE_BREAK);
         gcodeBuffer.append("G0 F10000").append(LINE_BREAK);
         return gcodeBuffer.toString();
     }
